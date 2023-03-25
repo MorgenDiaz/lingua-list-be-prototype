@@ -11,6 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const openai_1 = require("openai");
+const vocabWords = require("./data/VocabWords");
+const VocabularyList_1 = require("./model/VocabularyList");
 const API_KEY = process.env.OPEN_AI_API_KEY;
 if (!API_KEY) {
     throw new Error("error locating api key.");
@@ -19,7 +21,10 @@ const chatConfiguration = new openai_1.Configuration({
     apiKey: API_KEY,
 });
 const openai = new openai_1.OpenAIApi(chatConfiguration);
-const chatPrompt = `could you create a sentence incorporating the word surreptitious or variations of surreptitious.`;
+const vocabList = new VocabularyList_1.VocabularyList(vocabWords);
+const randomVocabWord = vocabList.getRandomWord();
+console.log(randomVocabWord);
+const chatPrompt = `could you create a sentence incorporating the word ${randomVocabWord} or variations of ${randomVocabWord}.`;
 const options = {
     model: "text-davinci-003",
     prompt: chatPrompt,
