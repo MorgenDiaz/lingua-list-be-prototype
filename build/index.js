@@ -8,34 +8,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
-const openai_1 = require("openai");
+const readline_1 = __importDefault(require("readline"));
+const figlet = require("figlet");
 const vocabWords = require("./data/VocabWords");
 const VocabularyList_1 = require("./model/VocabularyList");
-const API_KEY = process.env.OPEN_AI_API_KEY;
-if (!API_KEY) {
-    throw new Error("error locating api key.");
-}
-const chatConfiguration = new openai_1.Configuration({
-    apiKey: API_KEY,
-});
-const openai = new openai_1.OpenAIApi(chatConfiguration);
+const SentenceBuilder_1 = require("./model/SentenceBuilder");
 const vocabList = new VocabularyList_1.VocabularyList(vocabWords);
 const randomVocabWord = vocabList.getRandomWord();
-console.log(randomVocabWord);
-const chatPrompt = `could you create a sentence incorporating the word ${randomVocabWord} or variations of ${randomVocabWord}.`;
-const options = {
-    model: "text-davinci-003",
-    prompt: chatPrompt,
-    temperature: 0.5,
-    max_tokens: 200,
-    n: 1,
-    stream: false,
+const sentenceBuilder = new SentenceBuilder_1.SentenceBuilder();
+const processUserAnswer = (answer, connection) => {
+    connection.close();
+    const isCorrectAnswer = answer.trim().toLowerCase() === randomVocabWord;
+    if (isCorrectAnswer) {
+        console.log("you chose correctly!");
+        process.exit(0);
+        process.exit(0);
+    }
+    else {
+        console.log("Sorry, that was not the correct word. Please, try again!");
+        promptUserForAnswer();
+    }
 };
-const promptAi = () => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield openai.createCompletion(options);
-    const { choices } = response.data;
-    console.log(choices[0].text);
+const promptUserForAnswer = () => {
+    const readline = readline_1.default.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+    readline.question("Please enter the word that best fits the sentence, from you vocabulary list. \n", (answer) => {
+        processUserAnswer(answer, readline);
+    });
+};
+figlet("LinguaList", function (err, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (err) {
+            console.log("Something went wrong...");
+            console.dir(err);
+            return;
+        }
+        console.log(data);
+        console.log(`Selecting random word from list:
+        
+    `);
+        for (const word of vocabWords) {
+            console.log(word);
+        }
+        const sentence = yield sentenceBuilder.getSentenceForWord(randomVocabWord);
+        const wordPlaceHolder = new Array(randomVocabWord.length)
+            .fill("*")
+            .join("");
+        const sentenceHiddenWord = sentence.replace(randomVocabWord, wordPlaceHolder);
+        console.log(sentenceHiddenWord + "\n");
+        promptUserForAnswer();
+    });
 });
-promptAi();

@@ -1,40 +1,79 @@
 require("dotenv").config();
-import { Configuration, OpenAIApi } from "openai";
+import Readline from "readline";
+
+const figlet = require("figlet");
+
 const vocabWords = require("./data/VocabWords");
 import { VocabularyList } from "./model/VocabularyList";
-
-const API_KEY: string | undefined = process.env.OPEN_AI_API_KEY;
-
-if (!API_KEY) {
-  throw new Error("error locating api key.");
-}
-
-const chatConfiguration = new Configuration({
-  apiKey: API_KEY,
-});
-
-const openai = new OpenAIApi(chatConfiguration);
+import { SentenceBuilder } from "./model/SentenceBuilder";
 
 const vocabList = new VocabularyList(vocabWords);
 const randomVocabWord = vocabList.getRandomWord();
+const sentenceBuilder = new SentenceBuilder();
 
-console.log(randomVocabWord);
+const processUserAnswer = (
+  answer: string,
+  connection: Readline.Interface
+): void => {
+  connection.close();
 
-const chatPrompt: string = `could you create a sentence incorporating the word ${randomVocabWord} or variations of ${randomVocabWord}.`;
-const options = {
-  model: "text-davinci-003",
-  prompt: chatPrompt,
-  temperature: 0.5,
-  max_tokens: 200,
-  n: 1,
-  stream: false,
+  const isCorrectAnswer = answer.trim().toLowerCase() === randomVocabWord;
+
+  if (isCorrectAnswer) {
+    console.log("you chose correctly!");
+  } else {
+    console.log("Sorry, that was not the correct word. Please, try again!");
+    promptUserForAnswer();
+  }
 };
 
-const promptAi = async (): Promise<void> => {
-  const response = await openai.createCompletion(options);
-  const { choices } = response.data;
+const promptUserForAnswer = (): void => {
+  const readline: Readline.Interface = Readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
-  console.log(choices[0].text);
+  readline.question(
+    "Please enter the word that best fits the sentence, from you vocabulary list. \n",
+    (answer) => {
+      processUserAnswer(answer, readline);
+    }
+  );
 };
 
-promptAi();
+figlet("LinguaList", async function (err, data) {
+  if (err) {
+    console.log("Something went wrong...");
+    console.dir(err);
+    return;
+  }
+
+  console.log(data);
+
+  console.log(
+    `Selecting random word from list:
+        
+    `
+  );
+
+  for (const word of vocabWords) {
+    console.log(word);
+  }
+
+  const sentence: string = await sentenceBuilder.getSentenceForWord(
+    randomVocabWord
+  );
+
+  const wordPlaceHolder: string = new Array(randomVocabWord.length)
+    .fill("*")
+    .join("");
+
+  const sentenceHiddenWord: string = sentence.replace(
+    randomVocabWord,
+    wordPlaceHolder
+  );
+
+  console.log(sentenceHiddenWord + "\n");
+
+  promptUserForAnswer();
+});
