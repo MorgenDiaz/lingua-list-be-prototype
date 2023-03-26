@@ -14,33 +14,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const readline_1 = __importDefault(require("readline"));
+const CompleteSentenceChallengeBuilder_1 = require("./model/CompleteSentenceChallengeBuilder");
 const figlet = require("figlet");
 const vocabWords = require("./data/VocabWords");
 const VocabularyList_1 = require("./model/VocabularyList");
-const SentenceBuilder_1 = require("./model/SentenceBuilder");
 const vocabList = new VocabularyList_1.VocabularyList(vocabWords);
 const randomVocabWord = vocabList.getRandomWord();
-const sentenceBuilder = new SentenceBuilder_1.SentenceBuilder();
-const processUserAnswer = (answer, connection) => {
+const completeSentenceChallengeBuilder = new CompleteSentenceChallengeBuilder_1.CompleteSentenceChallengeBuilder();
+const processUserAnswer = (answer, connection, challenge) => {
     connection.close();
     const isCorrectAnswer = answer.trim().toLowerCase() === randomVocabWord;
     if (isCorrectAnswer) {
-        console.log("you chose correctly!");
-        process.exit(0);
-        process.exit(0);
+        const { word, definition } = challenge;
+        console.log(`You chose correctly! The word ${word} fits the sentence perfectly.`);
+        console.log(`${word}:
+        ${definition}
+    `);
     }
     else {
         console.log("Sorry, that was not the correct word. Please, try again!");
-        promptUserForAnswer();
+        promptUserForAnswer(challenge);
     }
 };
-const promptUserForAnswer = () => {
+const promptUserForAnswer = (challenge) => {
     const readline = readline_1.default.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
     readline.question("Please enter the word that best fits the sentence, from you vocabulary list. \n", (answer) => {
-        processUserAnswer(answer, readline);
+        processUserAnswer(answer, readline, challenge);
     });
 };
 figlet("LinguaList", function (err, data) {
@@ -57,12 +59,8 @@ figlet("LinguaList", function (err, data) {
         for (const word of vocabWords) {
             console.log(word);
         }
-        const sentence = yield sentenceBuilder.getSentenceForWord(randomVocabWord);
-        const wordPlaceHolder = new Array(randomVocabWord.length)
-            .fill("*")
-            .join("");
-        const sentenceHiddenWord = sentence.replace(randomVocabWord, wordPlaceHolder);
-        console.log(sentenceHiddenWord + "\n");
-        promptUserForAnswer();
+        const completeSentenceChallenge = yield completeSentenceChallengeBuilder.buildChallengeFromWord(randomVocabWord);
+        console.log(completeSentenceChallenge.sentence + "\n");
+        promptUserForAnswer(completeSentenceChallenge);
     });
 });

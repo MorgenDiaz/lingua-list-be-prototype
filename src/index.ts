@@ -1,33 +1,41 @@
 require("dotenv").config();
 import Readline from "readline";
+import { CompleteSentenceChallenge } from "./model/CompleteSentenceChallenge";
+import { CompleteSentenceChallengeBuilder } from "./model/CompleteSentenceChallengeBuilder";
 
 const figlet = require("figlet");
 
 const vocabWords = require("./data/VocabWords");
 import { VocabularyList } from "./model/VocabularyList";
-import { SentenceBuilder } from "./model/SentenceBuilder";
 
 const vocabList = new VocabularyList(vocabWords);
 const randomVocabWord = vocabList.getRandomWord();
-const sentenceBuilder = new SentenceBuilder();
+const completeSentenceChallengeBuilder = new CompleteSentenceChallengeBuilder();
 
 const processUserAnswer = (
   answer: string,
-  connection: Readline.Interface
+  connection: Readline.Interface,
+  challenge: CompleteSentenceChallenge
 ): void => {
   connection.close();
 
   const isCorrectAnswer = answer.trim().toLowerCase() === randomVocabWord;
 
   if (isCorrectAnswer) {
-    console.log("you chose correctly!");
+    const { word, definition } = challenge;
+    console.log(
+      `You chose correctly! The word ${word} fits the sentence perfectly.`
+    );
+    console.log(`${word}:
+        ${definition}
+    `);
   } else {
     console.log("Sorry, that was not the correct word. Please, try again!");
-    promptUserForAnswer();
+    promptUserForAnswer(challenge);
   }
 };
 
-const promptUserForAnswer = (): void => {
+const promptUserForAnswer = (challenge: CompleteSentenceChallenge): void => {
   const readline: Readline.Interface = Readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -36,7 +44,7 @@ const promptUserForAnswer = (): void => {
   readline.question(
     "Please enter the word that best fits the sentence, from you vocabulary list. \n",
     (answer) => {
-      processUserAnswer(answer, readline);
+      processUserAnswer(answer, readline, challenge);
     }
   );
 };
@@ -60,20 +68,12 @@ figlet("LinguaList", async function (err, data) {
     console.log(word);
   }
 
-  const sentence: string = await sentenceBuilder.getSentenceForWord(
-    randomVocabWord
-  );
+  const completeSentenceChallenge: CompleteSentenceChallenge =
+    await completeSentenceChallengeBuilder.buildChallengeFromWord(
+      randomVocabWord
+    );
 
-  const wordPlaceHolder: string = new Array(randomVocabWord.length)
-    .fill("*")
-    .join("");
+  console.log(completeSentenceChallenge.sentence + "\n");
 
-  const sentenceHiddenWord: string = sentence.replace(
-    randomVocabWord,
-    wordPlaceHolder
-  );
-
-  console.log(sentenceHiddenWord + "\n");
-
-  promptUserForAnswer();
+  promptUserForAnswer(completeSentenceChallenge);
 });
