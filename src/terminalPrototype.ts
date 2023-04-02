@@ -48,7 +48,7 @@ const promptUserForAnswer = (challenge: CompleteSentenceChallenge): void => {
   );
 };
 
-figlet("LinguaList", async function (err, data) {
+figlet("LinguaList", async function (err: any, data: any) {
   if (err) {
     console.log("Something went wrong...");
     console.dir(err);

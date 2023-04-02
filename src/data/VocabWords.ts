@@ -1,8 +1,6 @@
-const vocabWords: string[] = [
+export const VOCAB_WORDS: string[] = [
   "surreptitious",
   "esoteric",
   "opulent",
   "inextricable",
 ];
-
-module.exports = vocabWords;
