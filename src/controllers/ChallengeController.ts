@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { controller } from "./decorators/controller";
-import { get } from "./decorators/routes";
+import { controller, get } from "./decorators";
 import { VocabularyList } from "../model/VocabularyList";
 import { VOCAB_WORDS } from "../data/VocabWords";
 import { CompleteSentenceChallengeBuilder } from "../model/CompleteSentenceChallengeBuilder";

@@ -1,13 +1,15 @@
 require("dotenv").config();
-import express from "express";
 import { env } from "process";
+import express from "express";
+import { AppRouter } from "./controllers/AppRouter";
 import "./controllers/ChallengeController";
+
 const PORT: Number = env["PORT"] ? Number(env["PORT"]) : 3000;
-import { router } from "./controllers/decorators/controller";
 
 const app = express();
+const appRouter = AppRouter.getInstance();
 
-app.use(router);
+app.use(appRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port:${PORT}`);

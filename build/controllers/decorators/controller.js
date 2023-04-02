@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.controller = exports.router = void 0;
-const express_1 = require("express");
+exports.controller = void 0;
+const AppRouter_1 = require("../AppRouter");
 const MetadataKeys_1 = require("./MetadataKeys");
-exports.router = (0, express_1.Router)();
 function controller(rootPath) {
     return function (constructor) {
+        const router = AppRouter_1.AppRouter.getInstance();
         const controllerProperties = Object.getOwnPropertyNames(constructor.prototype);
         for (const property of controllerProperties) {
             const method = Reflect.getMetadata(MetadataKeys_1.MetadataKeys.method, constructor.prototype, property);
             const path = Reflect.getMetadata(MetadataKeys_1.MetadataKeys.path, constructor.prototype, property);
             if (path) {
-                exports.router[method](`${rootPath}${path}`, constructor.prototype[property]);
+                router[method](`${rootPath}${path}`, constructor.prototype[property]);
             }
         }
     };

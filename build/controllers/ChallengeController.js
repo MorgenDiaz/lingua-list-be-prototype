@@ -19,8 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChallengeController = void 0;
-const controller_1 = require("./decorators/controller");
-const routes_1 = require("./decorators/routes");
+const decorators_1 = require("./decorators");
 const VocabularyList_1 = require("../model/VocabularyList");
 const VocabWords_1 = require("../data/VocabWords");
 const CompleteSentenceChallengeBuilder_1 = require("../model/CompleteSentenceChallengeBuilder");
@@ -36,12 +35,12 @@ let ChallengeController = class ChallengeController {
     }
 };
 __decorate([
-    (0, routes_1.get)("/word-context-sentence"),
+    (0, decorators_1.get)("/word-context-sentence"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChallengeController.prototype, "getWordContextSentence", null);
 ChallengeController = __decorate([
-    (0, controller_1.controller)("/challenge")
+    (0, decorators_1.controller)("/challenge")
 ], ChallengeController);
 exports.ChallengeController = ChallengeController;

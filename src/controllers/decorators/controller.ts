@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { AppRouter } from "../AppRouter";
 import { HttpMethods } from "./HttpMethods";
 import { MetadataKeys } from "./MetadataKeys";
 
-export const router = Router();
-
 export function controller(rootPath: string) {
   return function (constructor: Function) {
+    const router = AppRouter.getInstance();
+
     const controllerProperties = Object.getOwnPropertyNames(
       constructor.prototype
     );
