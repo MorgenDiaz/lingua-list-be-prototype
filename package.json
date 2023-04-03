@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:build": "tsc -w",
-    "start:run": "nodemon build/index.js",
-    "start": "npm run start:build & npm run start:run"
+    "dev:build": "tsc -w",
+    "dev:run": "nodemon build/index.js",
+    "dev": "concurrently npm:dev:*",
+    "build": "tsc",
+    "start": "npm run build && node build/index.js"
   },
   "repository": {
     "type": "git",
