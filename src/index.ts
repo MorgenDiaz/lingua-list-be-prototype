@@ -10,7 +10,7 @@ const PORT: Number = env["PORT"] ? Number(env["PORT"]) : 3000;
 
 const app = express();
 
-app.use(cors);
+app.use(cors());
 const appRouter = AppRouter.getInstance();
 app.use(appRouter);
 

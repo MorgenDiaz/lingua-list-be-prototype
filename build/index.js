@@ -12,7 +12,7 @@ require("./controllers/ChallengeController");
 require("./controllers/VocabularyWordController");
 const PORT = process_1.env["PORT"] ? Number(process_1.env["PORT"]) : 3000;
 const app = (0, express_1.default)();
-app.use(cors_1.default);
+app.use((0, cors_1.default)());
 const appRouter = AppRouter_1.AppRouter.getInstance();
 app.use(appRouter);
 app.listen(PORT, () => {
