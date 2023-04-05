@@ -8,6 +8,7 @@ const process_1 = require("process");
 const express_1 = __importDefault(require("express"));
 const AppRouter_1 = require("./controllers/AppRouter");
 require("./controllers/ChallengeController");
+require("./controllers/VocabularyWordController");
 const PORT = process_1.env["PORT"] ? Number(process_1.env["PORT"]) : 3000;
 const app = (0, express_1.default)();
 const appRouter = AppRouter_1.AppRouter.getInstance();

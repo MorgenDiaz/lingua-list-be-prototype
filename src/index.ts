@@ -3,6 +3,7 @@ import { env } from "process";
 import express from "express";
 import { AppRouter } from "./controllers/AppRouter";
 import "./controllers/ChallengeController";
+import "./controllers/VocabularyWordController";
 
 const PORT: Number = env["PORT"] ? Number(env["PORT"]) : 3000;
 

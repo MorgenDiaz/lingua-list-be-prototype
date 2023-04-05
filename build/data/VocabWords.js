@@ -6,4 +6,10 @@ exports.VOCAB_WORDS = [
     "esoteric",
     "opulent",
     "inextricable",
+    "dictum",
+    "cessation",
+    "sisyphean",
+    "egregious",
+    "emperical",
+    "oblong",
 ];
