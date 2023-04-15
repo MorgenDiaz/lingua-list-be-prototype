@@ -20,17 +20,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChallengeController = void 0;
 const decorators_1 = require("./decorators");
-const VocabularyList_1 = require("../model/VocabularyList");
 const VocabWords_1 = require("../data/VocabWords");
 const CompleteSentenceChallengeBuilder_1 = require("../model/CompleteSentenceChallengeBuilder");
+const DistinctiveWordListBuilder_1 = require("../model/DistinctiveWordListBuilder");
 let ChallengeController = class ChallengeController {
     getWordContextSentence(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const vocabList = new VocabularyList_1.VocabularyList(VocabWords_1.VOCAB_WORDS);
+            const distinctiveWordListBuilder = new DistinctiveWordListBuilder_1.DistinctiveWordListBuilder(VocabWords_1.VOCAB_WORDS);
+            const vocabList = yield distinctiveWordListBuilder.build(8);
             const contextWord = vocabList.getRandomWord();
             const completeSentenceChallengeBuilder = new CompleteSentenceChallengeBuilder_1.CompleteSentenceChallengeBuilder();
             const challenge = yield completeSentenceChallengeBuilder.buildChallengeFromWord(contextWord);
-            res.json(challenge);
+            res.json(Object.assign({ words: vocabList.words }, challenge));
         });
     }
 };
