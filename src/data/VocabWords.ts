@@ -19,4 +19,8 @@ export const VOCAB_WORDS: string[] = [
   "penurious",
   "exasperated",
   "paucity",
+  "enigma",
+  "attrition",
+  "dichotomy",
+  "inscrutable",
 ];
