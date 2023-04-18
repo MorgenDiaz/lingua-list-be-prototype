@@ -22,7 +22,14 @@ export class CompleteSentenceChallengeBuilder {
   buildChallengeFromWord = async (
     word: string
   ): Promise<CompleteSentenceChallenge> => {
-    const chatPrompt: string = `create a sentence incorporating the word ${word}. return a json encoded response with the key sentence which contains the generated sentence, the key definition which contains the definition of the word ${word}, and the key word which contains the word you constructed the sentence around. If you modified the original word, be sure to send the modified word in the response instead of the original. It is crucial that the word used in the sentence matches the word sent back in your response.`;
+    const chatPrompt: string = `Create a sentence incorporating the word ${word}. Return a JSON-encoded response with the following keys:
+
+    - "sentence": The generated sentence that incorporates the word ${word}.
+    - "definition": The definition of the word ${word}.
+    - "word": The word that was incorporated into the sentence.
+    
+    If the generated sentence uses a variation of the original word, such as a different tense or form, the "word" key should contain the modified version of the word. It is crucial that the word used in the sentence matches the word sent back in your response.
+    `;
 
     const options = {
       model: "text-davinci-003",
