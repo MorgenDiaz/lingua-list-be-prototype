@@ -12,10 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CompleteSentenceChallengeBuilder = void 0;
 const openai_1 = require("openai");
 const CompleteSentenceChallenge_1 = require("./CompleteSentenceChallenge");
+const EnvironmentVariables_1 = require("../EnvironmentVariables");
 class CompleteSentenceChallengeBuilder {
     constructor() {
         this.buildChallengeFromWord = (word) => __awaiter(this, void 0, void 0, function* () {
-            const chatPrompt = `create a sentence incorporating the word ${word}. return a json encoded response with the key sentence which contains the generated sentence, the key definition which contains the definition of the word ${word}, and the key word which contains the word you constructed the sentence around. if you modified the original word, be sure to send the modified word in the response instead of the original.`;
+            const chatPrompt = `Create a sentence incorporating the word ${word}. Return a JSON-encoded response with the following keys:
+
+    - "sentence": The generated sentence that incorporates the word ${word}.
+    - "definition": The definition of the word ${word}.
+    - "word": The word that was incorporated into the sentence.
+    
+    If the generated sentence uses a variation of the original word, such as a different tense or form, the "word" key should contain the modified version of the word. It is crucial that the word used in the sentence matches the word sent back in your response.
+    `;
             const options = {
                 model: "text-davinci-003",
                 prompt: chatPrompt,
@@ -30,10 +38,7 @@ class CompleteSentenceChallengeBuilder {
             const completeSentenceChallenge = new CompleteSentenceChallenge_1.CompleteSentenceChallenge(generatedSentenceForWord);
             return completeSentenceChallenge;
         });
-        const API_KEY = process.env.OPEN_AI_API_KEY;
-        if (!API_KEY) {
-            throw new Error("error locating api key.");
-        }
+        const API_KEY = EnvironmentVariables_1.EnvironmentVariables.getInstance().OPEN_AI_API_KEY;
         const chatConfiguration = new openai_1.Configuration({
             apiKey: API_KEY,
         });

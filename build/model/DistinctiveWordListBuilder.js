@@ -44,7 +44,7 @@ class DistinctiveWordListBuilder {
             if (!firstChoice.text) {
                 throw new Error("OpenAI failed to generate any list items.");
             }
-            const wordList = firstChoice.text.trim().split(",");
+            const wordList = firstChoice.text.trim().toLowerCase().split(",");
             return new VocabularyList_1.VocabularyList(wordList);
         });
         const API_KEY = process.env.OPEN_AI_API_KEY;

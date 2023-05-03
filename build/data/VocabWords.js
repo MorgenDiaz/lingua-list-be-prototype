@@ -22,4 +22,8 @@ exports.VOCAB_WORDS = [
     "penurious",
     "exasperated",
     "paucity",
+    "enigma",
+    "attrition",
+    "dichotomy",
+    "inscrutable",
 ];

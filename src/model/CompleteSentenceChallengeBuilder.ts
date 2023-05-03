@@ -1,16 +1,13 @@
 import { Configuration, OpenAIApi } from "openai";
 import { CompleteSentenceChallenge } from "./CompleteSentenceChallenge";
 import { GeneratedSentenceForWord } from "./GeneratedSentenceForWord";
+import { EnvironmentVariables } from "../EnvironmentVariables";
 
 export class CompleteSentenceChallengeBuilder {
   private openai;
 
   constructor() {
-    const API_KEY: string | undefined = process.env.OPEN_AI_API_KEY;
-
-    if (!API_KEY) {
-      throw new Error("error locating api key.");
-    }
+    const API_KEY: string = EnvironmentVariables.getInstance().OPEN_AI_API_KEY;
 
     const chatConfiguration = new Configuration({
       apiKey: API_KEY,
