@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const readline_1 = __importDefault(require("readline"));
-const CompleteSentenceChallengeBuilder_1 = require("./model/CompleteSentenceChallengeBuilder");
+const CompleteSentenceChallengeBuilder_1 = require("./application/model/CompleteSentenceChallengeBuilder");
 const figlet = require("figlet");
 const vocabWords = require("./data/VocabWords");
-const VocabularyList_1 = require("./model/VocabularyList");
+const VocabularyList_1 = require("./application/model/VocabularyList");
 const vocabList = new VocabularyList_1.VocabularyList(vocabWords);
 const randomVocabWord = vocabList.getRandomWord();
 const completeSentenceChallengeBuilder = new CompleteSentenceChallengeBuilder_1.CompleteSentenceChallengeBuilder();

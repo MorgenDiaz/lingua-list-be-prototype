@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { controller, get } from "./decorators";
-import { VOCAB_WORDS } from "../data/VocabWords";
+import { VOCAB_WORDS } from "../../data/VocabWords";
 import { CompleteSentenceChallengeBuilder } from "../model/CompleteSentenceChallengeBuilder";
 import { CompleteSentenceChallenge } from "../model/CompleteSentenceChallenge";
 import { DistinctiveWordListBuilder } from "../model/DistinctiveWordListBuilder";

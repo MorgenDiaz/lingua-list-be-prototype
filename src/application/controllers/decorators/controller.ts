@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AppRouter } from "../AppRouter";
+import { AppRouter } from "../../AppRouter";
 import { HttpMethods } from "./HttpMethods";
 import { MetadataKeys } from "./MetadataKeys";
 

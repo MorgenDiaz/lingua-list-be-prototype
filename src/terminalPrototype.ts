@@ -1,11 +1,11 @@
 import Readline from "readline";
-import { CompleteSentenceChallenge } from "./model/CompleteSentenceChallenge";
-import { CompleteSentenceChallengeBuilder } from "./model/CompleteSentenceChallengeBuilder";
+import { CompleteSentenceChallenge } from "./application/model/CompleteSentenceChallenge";
+import { CompleteSentenceChallengeBuilder } from "./application/model/CompleteSentenceChallengeBuilder";
 
 const figlet = require("figlet");
 
 const vocabWords = require("./data/VocabWords");
-import { VocabularyList } from "./model/VocabularyList";
+import { VocabularyList } from "./application/model/VocabularyList";
 
 const vocabList = new VocabularyList(vocabWords);
 const randomVocabWord = vocabList.getRandomWord();
