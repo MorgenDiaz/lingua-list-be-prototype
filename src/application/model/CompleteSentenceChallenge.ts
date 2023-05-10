@@ -1,23 +1,25 @@
 import { GeneratedSentenceForWord } from "./GeneratedSentenceForWord";
 
 export class CompleteSentenceChallenge {
-  word: string;
-  sentence: string;
-  definition: string;
+  readonly word: string;
+  private _sentence: string;
+  readonly definition: string;
 
-  constructor(generatedSentenceForWord: GeneratedSentenceForWord) {
-    this.word = generatedSentenceForWord.word;
-    this.sentence = generatedSentenceForWord.sentence;
-    this.definition = generatedSentenceForWord.definition;
-
-    this.obstructVocabWordInSentence();
+  constructor(word: string, sentence: string, definition: string) {
+    this.word = word;
+    this._sentence = sentence;
+    this.definition = definition;
   }
 
-  private obstructVocabWordInSentence = () => {
-    let { word, sentence } = this;
+  obstructVocabWordInSentence = () => {
+    let { word, _sentence } = this;
 
     const wordPlaceHolder: string = new Array(word.length).fill("*").join("");
 
-    this.sentence = sentence.replace(word, wordPlaceHolder);
+    this._sentence = _sentence.replace(word, wordPlaceHolder);
   };
+
+  get sentence(): string {
+    return this._sentence;
+  }
 }

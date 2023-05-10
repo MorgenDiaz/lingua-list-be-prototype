@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class VocabularyWord {
-    constructor(word, definition) {
+    constructor(id, word, definition) {
+        this.id = id;
         this.word = word;
         this.definition = definition;
     }

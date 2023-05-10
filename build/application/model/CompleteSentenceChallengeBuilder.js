@@ -16,7 +16,7 @@ const EnvironmentVariables_1 = require("../EnvironmentVariables");
 class CompleteSentenceChallengeBuilder {
     constructor() {
         this.buildChallengeFromWord = (word) => __awaiter(this, void 0, void 0, function* () {
-            const chatPrompt = `Create a sentence incorporating the word ${word}. Return a JSON-encoded response with the following keys:
+            const chatPrompt = `Create a sentence incorporating the word ${word}. Return a JSON-encoded object with the following keys:
 
     - "sentence": The generated sentence that incorporates the word ${word}.
     - "definition": The definition of the word ${word}.
@@ -35,7 +35,7 @@ class CompleteSentenceChallengeBuilder {
             const response = yield this.openai.createCompletion(options);
             const { choices } = response.data;
             const generatedSentenceForWord = JSON.parse(choices[0].text || "");
-            const completeSentenceChallenge = new CompleteSentenceChallenge_1.CompleteSentenceChallenge(generatedSentenceForWord);
+            const completeSentenceChallenge = new CompleteSentenceChallenge_1.CompleteSentenceChallenge(generatedSentenceForWord.word, generatedSentenceForWord.sentence, generatedSentenceForWord.definition);
             return completeSentenceChallenge;
         });
         const API_KEY = EnvironmentVariables_1.EnvironmentVariables.getInstance().OPEN_AI_API_KEY;

@@ -20,32 +20,56 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var ChallengeController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChallengeController = void 0;
+const EnvironmentVariables_1 = require("../EnvironmentVariables");
 const decorators_1 = require("./decorators");
 const CompleteSentenceChallengeBuilder_1 = require("../model/CompleteSentenceChallengeBuilder");
+const CompleteSentenceChallenge_1 = require("../model/CompleteSentenceChallenge");
 const DistinctiveWordListBuilder_1 = require("../model/DistinctiveWordListBuilder");
 const VocabularyWordsAdapter_1 = __importDefault(require("../../database/VocabularyWordsAdapter"));
-let ChallengeController = class ChallengeController {
+let ChallengeController = ChallengeController_1 = class ChallengeController {
     getWordContextSentence(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const vocabularyWords = yield new VocabularyWordsAdapter_1.default().getAllVocabularyWords();
-            const distinctiveWordListBuilder = new DistinctiveWordListBuilder_1.DistinctiveWordListBuilder(vocabularyWords);
-            const vocabList = yield distinctiveWordListBuilder.build(8);
+            const vocabList = yield ChallengeController_1.getRandomVocabularySublist();
             const contextWord = vocabList.getRandomWord();
+            const vocabularyWordsAdapter = new VocabularyWordsAdapter_1.default();
+            const wordSentences = yield vocabularyWordsAdapter.getSentencesForVocabularyWord(contextWord.id);
             const completeSentenceChallengeBuilder = new CompleteSentenceChallengeBuilder_1.CompleteSentenceChallengeBuilder();
-            const challenge = yield completeSentenceChallengeBuilder.buildChallengeFromWord(contextWord.word);
-            res.json(Object.assign({ words: vocabList.words }, challenge));
+            let challenge;
+            if (wordSentences.length <
+                EnvironmentVariables_1.EnvironmentVariables.getInstance().MAX_GENERATED_SENTENCES_PER_WORD) {
+                challenge = yield completeSentenceChallengeBuilder.buildChallengeFromWord(contextWord.word);
+                vocabularyWordsAdapter.insertSentenceForVocabularyWord(challenge.sentence, contextWord.id);
+            }
+            else {
+                const randomSentenceIndex = Math.floor(Math.random() * wordSentences.length);
+                challenge = new CompleteSentenceChallenge_1.CompleteSentenceChallenge(contextWord.word, wordSentences[randomSentenceIndex], contextWord.definition);
+            }
+            challenge.obstructVocabWordInSentence();
+            res.json({
+                words: vocabList.words.map((wordData) => wordData.word),
+                word: challenge.word,
+                sentence: challenge.sentence,
+                definition: challenge.definition,
+            });
         });
     }
 };
+ChallengeController.getRandomVocabularySublist = () => __awaiter(void 0, void 0, void 0, function* () {
+    const vocabularyWords = yield new VocabularyWordsAdapter_1.default().getAllVocabularyWords();
+    const distinctiveWordListBuilder = new DistinctiveWordListBuilder_1.DistinctiveWordListBuilder(vocabularyWords);
+    const vocabList = yield distinctiveWordListBuilder.build(8);
+    return vocabList;
+});
 __decorate([
     (0, decorators_1.get)("/word-context-sentence"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChallengeController.prototype, "getWordContextSentence", null);
-ChallengeController = __decorate([
+ChallengeController = ChallengeController_1 = __decorate([
     (0, decorators_1.controller)("/challenge")
 ], ChallengeController);
 exports.ChallengeController = ChallengeController;

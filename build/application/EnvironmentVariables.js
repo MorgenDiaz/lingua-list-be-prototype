@@ -8,6 +8,7 @@ class EnvironmentVariables {
         const port = process.env.PORT;
         const databasePassword = process.env.DATABASE_PASSWORD;
         const databaseHost = process.env.DATABASE_HOST;
+        const maxGeneratedSentencesPerWord = process.env.MAX_GENERATED_SENTENCES_PER_WORD;
         if (!openAiKey)
             throw Error("An openAI api key is required. Please add your api key to your environment variables under the property OPEN_AI_API_KEY.");
         if (!databasePassword)
@@ -18,6 +19,9 @@ class EnvironmentVariables {
         this.PORT = port ? Number.parseInt(port) : 90001;
         this.DATABASE_PASSWORD = databasePassword;
         this.DATABASE_HOST = databaseHost;
+        this.MAX_GENERATED_SENTENCES_PER_WORD = maxGeneratedSentencesPerWord
+            ? Number(maxGeneratedSentencesPerWord)
+            : 0;
     }
 }
 _a = EnvironmentVariables;

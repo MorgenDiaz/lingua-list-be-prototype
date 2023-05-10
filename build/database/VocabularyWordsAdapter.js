@@ -26,6 +26,43 @@ class VocabularyWordsAdapter {
             }
             return [];
         });
+        this.getSentencesForVocabularyWord = (wordId) => __awaiter(this, void 0, void 0, function* () {
+            const client = yield _1.pool.connect();
+            const selectQuery = `
+      SELECT * FROM sentences
+      WHERE vocabulary_id = $1
+    `;
+            try {
+                const { rows } = yield client.query(selectQuery, [wordId]);
+                return rows.map((row) => row.sentence);
+            }
+            catch (error) {
+                console.error("There was an error retrieving sentences for word.");
+            }
+            finally {
+                client.release();
+            }
+            return [];
+        });
+        this.insertSentenceForVocabularyWord = (sentence, wordId) => __awaiter(this, void 0, void 0, function* () {
+            const client = yield _1.pool.connect();
+            const insertQuery = `
+      INSERT INTO sentences(vocabulary_id, sentence)
+      VALUES($1, $2)
+      RETURNING id
+    `;
+            try {
+                const { rows: [id], } = yield client.query(insertQuery, [wordId, sentence]);
+                return id;
+            }
+            catch (error) {
+                console.error("There was an error inserting the vocabulary word sentence.");
+            }
+            finally {
+                client.release();
+            }
+            return -1;
+        });
     }
 }
 exports.default = VocabularyWordsAdapter;

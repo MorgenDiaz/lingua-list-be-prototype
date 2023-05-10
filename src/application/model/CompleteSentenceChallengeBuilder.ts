@@ -19,7 +19,7 @@ export class CompleteSentenceChallengeBuilder {
   buildChallengeFromWord = async (
     word: string
   ): Promise<CompleteSentenceChallenge> => {
-    const chatPrompt: string = `Create a sentence incorporating the word ${word}. Return a JSON-encoded response with the following keys:
+    const chatPrompt: string = `Create a sentence incorporating the word ${word}. Return a JSON-encoded object with the following keys:
 
     - "sentence": The generated sentence that incorporates the word ${word}.
     - "definition": The definition of the word ${word}.
@@ -45,7 +45,9 @@ export class CompleteSentenceChallengeBuilder {
     );
 
     const completeSentenceChallenge = new CompleteSentenceChallenge(
-      generatedSentenceForWord
+      generatedSentenceForWord.word,
+      generatedSentenceForWord.sentence,
+      generatedSentenceForWord.definition
     );
 
     return completeSentenceChallenge;

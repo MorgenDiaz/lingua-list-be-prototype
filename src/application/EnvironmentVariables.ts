@@ -1,3 +1,4 @@
+import { env } from "process";
 export class EnvironmentVariables {
   private static instance: EnvironmentVariables;
 
@@ -5,12 +6,15 @@ export class EnvironmentVariables {
   readonly OPEN_AI_API_KEY: string;
   readonly DATABASE_PASSWORD: string;
   readonly DATABASE_HOST: string;
+  readonly MAX_GENERATED_SENTENCES_PER_WORD: number;
 
   private constructor() {
     const openAiKey = process.env.OPEN_AI_API_KEY;
     const port = process.env.PORT;
     const databasePassword = process.env.DATABASE_PASSWORD;
     const databaseHost = process.env.DATABASE_HOST;
+    const maxGeneratedSentencesPerWord =
+      process.env.MAX_GENERATED_SENTENCES_PER_WORD;
 
     if (!openAiKey)
       throw Error(
@@ -29,6 +33,9 @@ export class EnvironmentVariables {
     this.PORT = port ? Number.parseInt(port) : 90001;
     this.DATABASE_PASSWORD = databasePassword;
     this.DATABASE_HOST = databaseHost;
+    this.MAX_GENERATED_SENTENCES_PER_WORD = maxGeneratedSentencesPerWord
+      ? Number(maxGeneratedSentencesPerWord)
+      : 0;
   }
 
   static getInstance = () => {
