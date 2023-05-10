@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import { controller, get } from "./decorators";
-import { VOCAB_WORDS } from "../../data/VocabWords";
 import { CompleteSentenceChallengeBuilder } from "../model/CompleteSentenceChallengeBuilder";
 import { CompleteSentenceChallenge } from "../model/CompleteSentenceChallenge";
 import { DistinctiveWordListBuilder } from "../model/DistinctiveWordListBuilder";
+import VocabularyWordsAdapter from "../../database/VocabularyWordsAdapter";
 @controller("/challenge")
 export class ChallengeController {
   @get("/word-context-sentence")
   async getWordContextSentence(req: Request, res: Response): Promise<void> {
+    const vocabularyWords =
+      await new VocabularyWordsAdapter().getAllVocabularyWords();
+
     const distinctiveWordListBuilder = new DistinctiveWordListBuilder(
-      VOCAB_WORDS
+      vocabularyWords
     );
 
     const vocabList = await distinctiveWordListBuilder.build(8);
@@ -19,7 +22,7 @@ export class ChallengeController {
       new CompleteSentenceChallengeBuilder();
     const challenge: CompleteSentenceChallenge =
       await completeSentenceChallengeBuilder.buildChallengeFromWord(
-        contextWord
+        contextWord.word
       );
 
     res.json({ words: vocabList.words, ...challenge });

@@ -39,8 +39,12 @@ const populateVocabularyWords = (words) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 const seed = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.debug("Tearing down database...");
     yield (0, migration_1.down)();
+    console.debug("Raising up database...");
     yield (0, migration_1.up)();
-    yield populateVocabularyWords(VocabWords_1.VOCAB_WORDS_SEED);
+    console.debug("Populating vocabulary words...");
+    yield populateVocabularyWords(VocabWords_1.VOCAB_WORDS);
+    console.log("Database construction complete.");
 });
 exports.seed = seed;

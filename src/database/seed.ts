@@ -1,6 +1,6 @@
 import { pool } from ".";
 import { up, down } from "./migration";
-import { VOCAB_WORDS_SEED } from "../data/VocabWords";
+import { VOCAB_WORDS } from "../data/VocabWords";
 
 const populateVocabularyWords = async (
   words: { word: string; definition: string }[]
@@ -33,7 +33,11 @@ const populateVocabularyWords = async (
 };
 
 export const seed = async () => {
+  console.debug("Tearing down database...");
   await down();
+  console.debug("Raising up database...");
   await up();
-  await populateVocabularyWords(VOCAB_WORDS_SEED);
+  console.debug("Populating vocabulary words...");
+  await populateVocabularyWords(VOCAB_WORDS);
+  console.log("Database construction complete.");
 };

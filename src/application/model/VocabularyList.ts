@@ -1,13 +1,14 @@
+import VocabularyWord from "./VocabularyWord";
+
 export class VocabularyList {
-  constructor(private _words: string[]) {}
+  readonly words: VocabularyWord[] = [];
 
-  getRandomWord = (): string => {
-    const _words = this._words;
-    const randomIndex = Math.floor(Math.random() * _words.length);
-    return _words[randomIndex];
-  };
-
-  get words() {
-    return this._words;
+  constructor(words: VocabularyWord[]) {
+    this.words = words;
   }
+
+  getRandomWord = (): VocabularyWord => {
+    const randomIndex = Math.floor(Math.random() * this.words.length);
+    return this.words[randomIndex];
+  };
 }

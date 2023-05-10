@@ -2,16 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VocabularyList = void 0;
 class VocabularyList {
-    constructor(_words) {
-        this._words = _words;
+    constructor(words) {
+        this.words = [];
         this.getRandomWord = () => {
-            const _words = this._words;
-            const randomIndex = Math.floor(Math.random() * _words.length);
-            return _words[randomIndex];
+            const randomIndex = Math.floor(Math.random() * this.words.length);
+            return this.words[randomIndex];
         };
-    }
-    get words() {
-        return this._words;
+        this.words = words;
     }
 }
 exports.VocabularyList = VocabularyList;

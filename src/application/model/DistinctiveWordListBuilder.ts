@@ -1,10 +1,11 @@
 import { Configuration, OpenAIApi } from "openai";
 import { VocabularyList } from "./VocabularyList";
+import VocabularyWord from "./VocabularyWord";
 
 export class DistinctiveWordListBuilder {
   private openai;
 
-  constructor(private words: string[]) {
+  constructor(private words: VocabularyWord[]) {
     const API_KEY: string | undefined = process.env.OPEN_AI_API_KEY;
 
     if (!API_KEY) {
@@ -35,7 +36,7 @@ export class DistinctiveWordListBuilder {
 
         Here are the words I would like you to select from.
 
-        ${this.words}
+        ${this.words.map((wordDetails) => wordDetails.word)}
         `;
 
     const options = {
@@ -56,7 +57,10 @@ export class DistinctiveWordListBuilder {
     }
 
     const wordList = firstChoice.text.trim().toLowerCase().split(",");
+    const vocabularyWords = this.words.filter((wordData) =>
+      wordList.includes(wordData.word)
+    );
 
-    return new VocabularyList(wordList);
+    return new VocabularyList(vocabularyWords);
   };
 }

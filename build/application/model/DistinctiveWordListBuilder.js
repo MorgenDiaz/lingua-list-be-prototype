@@ -28,7 +28,7 @@ class DistinctiveWordListBuilder {
 
         Here are the words I would like you to select from.
 
-        ${this.words}
+        ${this.words.map((wordDetails) => wordDetails.word)}
         `;
             const options = {
                 model: "text-davinci-003",
@@ -45,7 +45,8 @@ class DistinctiveWordListBuilder {
                 throw new Error("OpenAI failed to generate any list items.");
             }
             const wordList = firstChoice.text.trim().toLowerCase().split(",");
-            return new VocabularyList_1.VocabularyList(wordList);
+            const vocabularyWords = this.words.filter((wordData) => wordList.includes(wordData.word));
+            return new VocabularyList_1.VocabularyList(vocabularyWords);
         });
         const API_KEY = process.env.OPEN_AI_API_KEY;
         if (!API_KEY) {
