@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed-database": "node build/database/seed.js",
     "dev:build": "tsc -w",
     "dev:run": "nodemon build/index.js",
     "dev": "concurrently npm:dev:*",

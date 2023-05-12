@@ -1,11 +1,12 @@
 import { Pool } from "pg";
 import { EnvironmentVariables } from "../application/EnvironmentVariables";
+const environmentVariables = EnvironmentVariables.getInstance();
 
-const pool = new Pool({
-  user: "morgendiaz",
-  host: EnvironmentVariables.getInstance().DATABASE_HOST,
-  database: "lingualist",
-  password: EnvironmentVariables.getInstance().DATABASE_PASSWORD,
-});
+/*
+  The only way I was able to establish an ssl connection to the live database
+  was by setting the node-postgress environment variables.
+*/
+
+const pool = new Pool();
 
 export { pool };

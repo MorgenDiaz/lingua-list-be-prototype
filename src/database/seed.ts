@@ -32,7 +32,7 @@ const populateVocabularyWords = async (
   }
 };
 
-export const seed = async () => {
+const seed = async () => {
   console.debug("Tearing down database...");
   await down();
   console.debug("Raising up database...");
@@ -41,3 +41,5 @@ export const seed = async () => {
   await populateVocabularyWords(VOCAB_WORDS);
   console.log("Database construction complete.");
 };
+
+seed();

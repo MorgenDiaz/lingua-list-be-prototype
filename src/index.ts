@@ -3,10 +3,8 @@ import cors from "cors";
 import express from "express";
 import { EnvironmentVariables } from "./application/EnvironmentVariables";
 import { AppRouter } from "./application/AppRouter";
-import VocabularyWordsAdapter from "./database/VocabularyWordsAdapter";
 import "./application/controllers/ChallengeController";
 import "./application/controllers/VocabularyWordController";
-import { seed } from "./database/seed";
 
 const PORT: Number = EnvironmentVariables.getInstance().PORT;
 

@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.seed = void 0;
 const _1 = require(".");
 const migration_1 = require("./migration");
 const VocabWords_1 = require("../data/VocabWords");
@@ -47,4 +46,4 @@ const seed = () => __awaiter(void 0, void 0, void 0, function* () {
     yield populateVocabularyWords(VocabWords_1.VOCAB_WORDS);
     console.log("Database construction complete.");
 });
-exports.seed = seed;
+seed();
